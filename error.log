@@ -1,0 +1,1 @@
+[Mon Jul 01 15:30:06.644834 2019] [php7:error] [pid 2188:tid 1484] [client 127.0.0.1:52793] PHP Fatal error:  Uncaught Error: Class 'SDO_DAS_XML' not found in D:\\Server\\www\\asper.xml\\index.php:5\nStack trace:\n#0 {main}\n  thrown in D:\\Server\\www\\asper.xml\\index.php on line 5, referer: http://asper.xml/install/index.php?route=install/step_4
