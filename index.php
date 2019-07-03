@@ -1,19 +1,19 @@
 <?php
 // Version
-die;
-$ch = curl_init("http://detopt.com.ua/content/export_opt.xml");
-$fp = fopen("yml3.xml", "w");
-
-curl_setopt($ch, CURLOPT_FILE, $fp);
-curl_setopt($ch, CURLOPT_HEADER, 0);
-
-curl_exec($ch);
-curl_close($ch);
-fclose($fp);
-var_dump(123);
-die;
-$xmldas = SDO_DAS_XML::create("letter.xsd");
-var_dump($xmldas);die;
+//die;
+//$ch = curl_init("http://detopt.com.ua/content/export_opt.xml");
+//$fp = fopen("yml3.xml", "w");
+//
+//curl_setopt($ch, CURLOPT_FILE, $fp);
+//curl_setopt($ch, CURLOPT_HEADER, 0);
+//
+//curl_exec($ch);
+//curl_close($ch);
+//fclose($fp);
+//var_dump(123);
+//die;
+//$xmldas = SDO_DAS_XML::create("letter.xsd");
+//var_dump($xmldas);die;
 //$document = $xmldas->loadFile("letter.xml");
 //$root_data_object = $document->getRootDataObject();
 //$root_data_object->date = "September 03, 2004";
