@@ -2,7 +2,7 @@
 <div id="content">
     <div class="page-header">
         <div class="container-fluid">
-            <div class="pull-right"><a href="{{ add }}" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus"></i></a> <a href="{{ repair }}" data-toggle="tooltip" title="{{ button_rebuild }}" class="btn btn-default"><i class="fa fa-refresh"></i></a>
+            <div class="pull-right"><a href="{{ add }}" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
                 <button type="button" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger" onclick="confirm('{{ text_confirm }}') ? $('#form-category').submit() : false;"><i class="fa fa-trash-o"></i></button>
             </div>
             <h1>{{ heading_title }}</h1>
@@ -36,32 +36,29 @@
                             <tr>
                                 <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
                                 <td class="text-left">
-                                    {% if sort %}
-                                        <a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_name }}</a>
-                                    {% else %}
-                                        <a href="{{ sort_name }}">{{ column_name }}</a>
-                                    {% endif %}
+                                    <a href="{{ sort_name }}" {% if sort == 'sort_name' %} class="{{ order|lower }} {% endif %} ">{{ column_name }}</a>
                                 </td>
                                 <td class="text-left">
-                                    {% if sort %}
-                                        <a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_url }}</a>
-                                    {% else %}
-                                        <a href="{{ sort_name }}">{{ column_url }}</a>
-                                    {% endif %}
+                                    <a href="{{ sort_url }}" {% if sort == 'sort_url' %} class="{{ order|lower }} {% endif %} ">{{ column_url }}</a>
                                 </td>
                                 <td class="text-right">
-                                    {% if sort == 'sort_order' %}
-                                        <a href="{{ sort_sort_order }}" class="{{ order|lower }}">{{ column_sort_order }}</a>
-                                    {% else %}
-                                        <a href="{{ sort_sort_order }}">{{ column_sort_order }}</a>
-                                    {% endif %}
+                                    <a href="{{ sort_type }}" {% if sort == 'sort_type' %} class="{{ order|lower }} {% endif %} ">{{ column_type }}</a>
+                                </td>
+                                <td class="text-right">
+                                    <a href="{{ sort_date_add }}" {% if sort == 'sort_date_add' %} class="{{ order|lower }} {% endif %} ">{{ column_date_add }}</a>
+                                </td>
+                                <td class="text-right">
+                                    <a href="{{ sort_date_parse }}" {% if sort == 'sort_date_parse' %} class="{{ order|lower }} {% endif %} ">{{ column_date_parse }}</a>
+                                </td>
+                                <td class="text-right">
+                                    <a href="{{ sort_notification }}" {% if sort == 'sort_notification' %} class="{{ order|lower }} {% endif %} ">{{ column_notification }}</a>
                                 </td>
                                 <td class="text-right">{{ column_action }}</td>
                             </tr>
                             </thead>
                             <tbody>
-                            {% if categories %}
-                                {% for category in categories %}
+                            {% if suppliers %}
+                                {% for supplier in suppliers %}
                                     <tr>
                                         <td class="text-center">{% if category.category_id in selected %}
                                                 <input type="checkbox" name="selected[]" value="{{ category.category_id }}" checked="checked" />
@@ -75,7 +72,7 @@
                                 {% endfor %}
                             {% else %}
                                 <tr>
-                                    <td class="text-center" colspan="5">{{ text_no_results }}</td>
+                                    <td class="text-center" colspan="8">{{ text_no_results }}</td>
                                 </tr>
                             {% endif %}
                             </tbody>
