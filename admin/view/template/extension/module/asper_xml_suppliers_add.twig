@@ -79,14 +79,15 @@
                                     $('#progress-text').html('<div class="text-danger">' + json['error'] + '</div>');
                                 }
 
-                                if (json['text']) {
-                                    $('#progress-bar').css('width', '20%');
-                                    $('#progress-text').html(json['text']);
+                                if (json['success']) {
+                                    $('#progress-bar').css('width', '5%');
+                                    $('#progress-text').html(json['success']);
+                                    if (json['data']) {
+                                        start_download(json['data']);
+                                    }
                                 }
 
-                                if (json['next']) {
-                                    next(json['next'], 1);
-                                }
+
                             },
                             error: function(xhr, ajaxOptions, thrownError) {
                                 alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -96,14 +97,14 @@
                 }, 500);
             });
 
-            function next(url, i) {
-                i = i + 1;
+            function start_download(id) {
 
                 $.ajax({
-                    url: url,
-                    dataType: 'json',
+                    url: 'index.php?route=extension/module/asper_xml_suppliers/download&user_token={{ user_token }}',
+                    type: 'post',
+                    data: {id:id.id},
                     success: function(json) {
-                        $('#progress-bar').css('width', (i * 20) + '%');
+                        $('#progress-bar').css('width', '15%');
 
                         if (json['error']) {
                             $('#progress-bar').addClass('progress-bar-danger');
@@ -113,17 +114,44 @@
                         if (json['success']) {
                             $('#progress-bar').addClass('progress-bar-success');
                             $('#progress-text').html('<span class="text-success">' + json['success'] + '</span>');
-
-                            $('#history').load('index.php?route=marketplace/installer/history&user_token={{ user_token }}');
+                            if (json['data']) {
+                                init_parse(json['data']);
+                            }
                         }
 
-                        if (json['text']) {
-                            $('#progress-text').html(json['text']);
+
+
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    }
+                });
+            }
+
+            function init_parse(id) {
+
+                $.ajax({
+                    url: 'index.php?route=extension/module/asper_xml_suppliers/initialization&user_token={{ user_token }}',
+                    type: 'post',
+                    data: {id:id.id},
+                    success: function(json) {
+                        $('#progress-bar').css('width', '15%');
+
+                        if (json['error']) {
+                            $('#progress-bar').addClass('progress-bar-danger');
+                            $('#progress-text').html('<div class="text-danger">' + json['error'] + '</div>');
                         }
 
-                        if (json['next']) {
-                            next(json['next'], i);
+                        if (json['success']) {
+                            $('#progress-bar').addClass('progress-bar-success');
+                            $('#progress-text').html('<span class="text-success">' + json['success'] + '</span>');
+                            if (json['data']) {
+                                init_parse(json['data']);
+                            }
                         }
+
+
+
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
                         alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);

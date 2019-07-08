@@ -1,3 +1,6 @@
 2019-07-02 14:34:26 - PHP Warning:  mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() in D:\Server\www\asper.xml\system\library\mail\mail.php on line 77
 2019-07-02 14:34:27 - PHP Warning:  mail(): Failed to connect to mailserver at &quot;localhost&quot; port 25, verify your &quot;SMTP&quot; and &quot;smtp_port&quot; setting in php.ini or use ini_set() in D:\Server\www\asper.xml\system\library\mail\mail.php on line 77
 2019-07-03 12:59:51 - PHP Notice:  Undefined variable: url in D:\Server\www\asper.xml\admin\controller\extension\module\asper_xml_suppliers.php on line 29
+2019-07-08 6:56:44 - PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: YES) in D:\server\OSPanel\domains\asper.xml\system\library\db\mysqli.php on line 7
+2019-07-08 6:56:44 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in D:\server\OSPanel\domains\asper.xml\system\library\db\mysqli.php on line 10
+2019-07-08 6:56:44 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in D:\server\OSPanel\domains\asper.xml\system\library\db\mysqli.php on line 10

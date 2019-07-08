@@ -9,14 +9,12 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
 
         $this->document->setTitle($this->language->get('heading_title') . $this->version);
 
-        $this->load->model('extension/suppliers/asper_xml_suppliers');
-
         $this->getList();
     }
 
     public function getList() {
         $data = array();
-
+        $this->load->model('extension/suppliers/asper_xml_suppliers');
         if (isset($this->request->get['sort'])) {
             $sort = $this->request->get['sort'];
         } else {
@@ -67,9 +65,13 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
             'href' => $this->url->link('extension/module/asper_xml_suppliers', 'user_token=' . $this->session->data['user_token'] . $url, true)
         );
 
+        $data['suppliers'] =  $this->model_extension_suppliers_asper_xml_suppliers->getSuppliers($sort);
+
+        //actions
         $data['add'] = $this->url->link('extension/module/asper_xml_suppliers/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
         $data['delete'] = $this->url->link('extension/module/asper_xml_suppliers/delete', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
+        //componets
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['footer'] = $this->load->controller('common/footer');
@@ -157,15 +159,68 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
             if (isset($url['host']) && isset($url['path']) && $url['path'] ){
 
                 $data['url'] = $this->request->post['url'];
-                $data['name'] = mb_strtolower(preg_replace('~[\\\/":?<>|\.]~', '_', $url['path']));
+                $data['name'] = trim(mb_strtolower(preg_replace('~[\\\/":?<>|\.]~', '_', $url['path'])), '_');
 
-                $id = $this->model_extension_suppliers_asper_xml_suppliers->newSupplier($data);
-                $json['succes'] = $id;
+                try {
+                    $id = $this->model_extension_suppliers_asper_xml_suppliers->newSupplier($data);
+                    $json['data'] = array();
+                    $json['data']['id'] = $id;
+                    $json['success'] = $this->language->get('success_create');
+                } catch (Exception $e) {
+                    $json['error'] = $this->language->get('error_something') .  $e->getMessage();
+                }
+
             } else {
                 $json['error'] = $this->language->get('error_invalid_link');
             }
         } else {
             $json['error'] = $this->language->get('error_no_link');
+        }
+
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function download() {
+
+        $this->load->language('extension/module/asper_xml_suppliers');
+
+        if (isset($this->request->post['id']) && $this->request->post['id']) {
+            try {
+                $id = $this->load->controller('extension/module/asper_xml_suppliers_parser/download', $this->request->post['id']);
+                $json['data'] = array();
+                $json['data']['id'] = $id;
+                $json['success'] = $this->language->get('success_download');
+            } catch (Exception $e) {
+                $json['error'] = $this->language->get('error_something') . $e->getMessage();
+            }
+        } else {
+            $json['error'] = $this->language->get('error_no_id');
+        }
+
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function initialization() {
+
+        $this->load->language('extension/module/asper_xml_suppliers');
+
+        if (isset($this->request->post['id']) && $this->request->post['id']) {
+            try {
+                $id = $this->load->controller('extension/module/asper_xml_suppliers_parser/analysis', $this->request->post['id']);
+                if (is_int($id)){
+                    $json['data'] = array();
+                    $json['data']['id'] = $id;
+                    $json['success'] = $this->language->get('success_download');
+                } else {
+                    $json['error'] = $id;
+                }
+            } catch (Exception $e) {
+                $json['error'] = $this->language->get('error_something') . $e->getMessage();
+            }
+        } else {
+            $json['error'] = $this->language->get('error_no_id');
         }
 
         $this->response->addHeader('Content-Type: application/json');
@@ -190,4 +245,19 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
         $this->model_setting_event->deleteEventByCode('amazon_pay');
     }
 
+    public function test() {
+        $a = $this->request->get['method'];
+        var_dump($this->$a());die;
+        return $this->$a();
+    }
+
+    private function test1() {
+        return 'test1';
+    }
+    private function test2() {
+        return 'test2';
+    }
+    private function test3() {
+        return 'test3';
+    }
 }

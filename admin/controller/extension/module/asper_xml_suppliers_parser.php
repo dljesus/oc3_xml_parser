@@ -3,6 +3,14 @@ class ControllerExtensionModuleAsperXmlSuppliersParser extends Controller
 {
 
     private $error = array();
+    private $feed = '';
+    private $options = array();
+    private $id;
+    private $fileName;
+    private $name = '';
+    private $type = '';
+    private $regexType = array();
+    private $regexCategory = array();
     private $version = '0.0 alpha';
 
     public function load($url = false)
@@ -21,5 +29,70 @@ class ControllerExtensionModuleAsperXmlSuppliersParser extends Controller
 
         $this->getList();
     }
+    public function index (){
+        return 1234;
+    }
 
+    public function download ($id, $url = false , $name = false) {
+        //return $id;
+        if (!$url && !$name && $id) {
+            $this->load->model('extension/suppliers/asper_xml_suppliers');
+            $supplier = $this->model_extension_suppliers_asper_xml_suppliers->getSupplier($id);
+            $name = $supplier['name'];
+
+            $url = $supplier['url'];
+        }
+        $this->name = $name;
+        set_time_limit(0);
+        $file_name = DIR_CACHE . 'suppliers/'  . $id . $name . '.xml';
+        $this->fileName = $file_name;
+        if (!file_exists(DIR_CACHE . 'suppliers')) {
+            if(mkdir(DIR_CACHE . 'suppliers' , 0777)){
+                return array('error' => 'failed to create directory');
+            }
+        }
+        $fp = fopen ($file_name, 'w');
+        $ch = curl_init(str_replace(" ","%20",$url));
+        curl_setopt($ch, CURLOPT_TIMEOUT, 50);
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+        return $id;
+    }
+    public function analysis ($id, $name = false, $options = array()) {
+        //return $id;
+        $data = array();
+
+        if (!$name && $id && !$options) {
+            $this->load->model('extension/suppliers/asper_xml_suppliers');
+            $supplier = $this->model_extension_suppliers_asper_xml_suppliers->getSupplier($id);
+            $file_name = DIR_CACHE . 'suppliers/' . $id . $supplier['name'] . '.xml';
+            $options = $supplier['options'];
+        } else {
+            $file_name = DIR_CACHE . 'suppliers/' . $id . $name . '.xml';
+        }
+        $this->id = $id;
+        $this->fileName = $file_name;
+        $data['type'] = $this->getType();
+    }
+
+    private function getType() {
+        if ($this->type) {
+            return $this->type;
+        }
+        return $this->parseType();
+    }
+
+    private function parseType() {
+
+    }
+
+    private function parseCategory() {
+
+    }
+    private function parseProduct () {
+
+    }
 }

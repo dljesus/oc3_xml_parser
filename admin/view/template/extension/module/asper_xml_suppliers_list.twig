@@ -41,17 +41,23 @@
                                 <td class="text-left">
                                     <a href="{{ sort_url }}" {% if sort == 'sort_url' %} class="{{ order|lower }} {% endif %} ">{{ column_url }}</a>
                                 </td>
-                                <td class="text-right">
+                                <td class="text-center">
                                     <a href="{{ sort_type }}" {% if sort == 'sort_type' %} class="{{ order|lower }} {% endif %} ">{{ column_type }}</a>
                                 </td>
-                                <td class="text-right">
+                                <td class="text-center">
+                                    <a href="{{ sort_notification }}" {% if sort == 'sort_notification' %} class="{{ order|lower }} {% endif %} ">{{ column_notification }}</a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ sort_status }}" {% if sort == 'sort_status' %} class="{{ order|lower }} {% endif %} ">{{ column_status }}</a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ sort_update }}" {% if sort == 'sort_update' %} class="{{ order|lower }} {% endif %} ">{{ column_update }}</a>
+                                </td>
+                                <td class="text-center">
                                     <a href="{{ sort_date_add }}" {% if sort == 'sort_date_add' %} class="{{ order|lower }} {% endif %} ">{{ column_date_add }}</a>
                                 </td>
-                                <td class="text-right">
+                                <td class="text-center">
                                     <a href="{{ sort_date_parse }}" {% if sort == 'sort_date_parse' %} class="{{ order|lower }} {% endif %} ">{{ column_date_parse }}</a>
-                                </td>
-                                <td class="text-right">
-                                    <a href="{{ sort_notification }}" {% if sort == 'sort_notification' %} class="{{ order|lower }} {% endif %} ">{{ column_notification }}</a>
                                 </td>
                                 <td class="text-right">{{ column_action }}</td>
                             </tr>
@@ -60,13 +66,20 @@
                             {% if suppliers %}
                                 {% for supplier in suppliers %}
                                     <tr>
-                                        <td class="text-center">{% if category.category_id in selected %}
-                                                <input type="checkbox" name="selected[]" value="{{ category.category_id }}" checked="checked" />
+                                        <td class="text-center">{% if supplier.supplier_id in selected %}
+                                                <input type="checkbox" name="selected[]" value="{{ supplier.supplier_id }}" checked="checked" />
                                             {% else %}
-                                                <input type="checkbox" name="selected[]" value="{{ category.category_id }}" />
+                                                <input type="checkbox" name="selected[]" value="{{ supplier.supplier_id }}" />
                                             {% endif %}</td>
-                                        <td class="text-left">{{ category.name }}</td>
-                                        <td class="text-right">{{ category.sort_order }}</td>
+                                        <td class="text-left">{{ supplier.name }}</td>
+                                        <td class="text-left">{{ supplier.url }}</td>
+                                        <td class="text-left">{{ supplier.type ?: text_no_type }}</td>
+                                        <td class="text-center">{{ supplier.notification }}</td>
+                                        <td class="text-center">{{ supplier.status ? text_status_actived : text_status_disable }}</td>
+                                        <td class="text-center">{{ supplier.status ? text_update_on : text_update_off }}</td>
+                                        <td class="text-center">{{ supplier.date_create }}</td>
+                                        <td class="text-center">{{ supplier.date_update }}</td>
+
                                         <td class="text-right"><a href="{{ category.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>
                                     </tr>
                                 {% endfor %}

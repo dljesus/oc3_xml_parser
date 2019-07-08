@@ -6,9 +6,9 @@ define('HTTP_SERVER', 'http://asper.xml/');
 define('HTTPS_SERVER', 'http://asper.xml/');
 
 // DIR
-define('DIR_APPLICATION', 'D:/Server/www/asper.xml/catalog/');
-define('DIR_SYSTEM', 'D:/Server/www/asper.xml/system/');
-define('DIR_IMAGE', 'D:/Server/www/asper.xml/image/');
+define('DIR_APPLICATION', 'D:/server/OSPanel/domains/asper.xml/catalog/');
+define('DIR_SYSTEM', 'D:/server/OSPanel/domains/asper.xml/system/');
+define('DIR_IMAGE', 'D:/server/OSPanel/domains/asper.xml/image/');
 define('DIR_STORAGE', DIR_SYSTEM . 'storage/');
 define('DIR_LANGUAGE', DIR_APPLICATION . 'language/');
 define('DIR_TEMPLATE', DIR_APPLICATION . 'view/theme/');
@@ -24,7 +24,7 @@ define('DIR_UPLOAD', DIR_STORAGE . 'upload/');
 define('DB_DRIVER', 'mysqli');
 define('DB_HOSTNAME', 'localhost');
 define('DB_USERNAME', 'root');
-define('DB_PASSWORD', 'root');
+define('DB_PASSWORD', '');
 define('DB_DATABASE', 'asper.xml');
 define('DB_PORT', '3306');
 define('DB_PREFIX', 'oc_');

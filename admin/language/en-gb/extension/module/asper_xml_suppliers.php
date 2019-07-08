@@ -7,6 +7,13 @@ $_['text_extension']   = 'Extensions';
 $_['text_new_supplier'] = 'Add new supplier';
 $_['text_progress'] = 'Progress';
 $_['text_progress_bar'] = 'Progress bar';
+$_['text_no_type'] = 'defined';
+$_['text_status_actived'] = 'ON';
+$_['text_status_disable'] = 'OFF';
+$_['text_update_on'] = 'ON';
+$_['text_update_off'] = 'OFF';
+
+
 
 //column
 $_['column_name'] = 'Name';
@@ -16,6 +23,8 @@ $_['column_type'] = 'Type';
 $_['column_action'] = 'Action';
 $_['column_date_add'] = 'Date add';
 $_['column_date_parse'] = 'Date parse';
+$_['column_status'] = 'Status';
+$_['column_update'] = 'CRON';
 
 // Entry
 $_['entry_status']     = 'Status';
@@ -31,3 +40,10 @@ $_['button_add'] = 'Add Supplier';
 $_['error_permission'] = 'Warning: You do not have permission to modify account module!';
 $_['error_no_link'] = 'No link! Entry Link';
 $_['error_invalid_link'] = 'Invalid link, check its correctness.';
+$_['error_something'] = 'Something went wrong: ';
+$_['error_download'] = 'Something went wrong when loading.';
+$_['error_no_id'] = 'Expect supplier id, something went wrong.';
+
+//Succes
+$_['success_create'] = 'The supplier is created, we begin to download the price.';
+$_['success_download'] = 'The price is successfully loaded, we begin its parsing.';
