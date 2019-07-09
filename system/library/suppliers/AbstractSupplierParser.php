@@ -1,12 +1,13 @@
 <?php
-class ControllerExtensionModuleAsperXmlSuppliersParser extends Controller
+class AbstractSupplierParser
 {
 
     private $error = array();
-    private $feed = '';
+    private $feed;
     private $options = array();
-    private $id;
-    private $fileName;
+    private $id = '';
+    private $fileName = '';
+    private $url = '';
     private $name = '';
     private $type = '';
     private $regexType =
@@ -14,6 +15,12 @@ class ControllerExtensionModuleAsperXmlSuppliersParser extends Controller
             'yandex-yml' => '/<\?xml[^>]*>[\s\n\r\n]*?(?:<!doctype\s[^>]*?yml_catalog[^>]*?>|)[\s\n\r\n]*?<yml_catalog\sdate\s?=\s?["|\']{1}[^"\']*["|\']{1}>/sui');
     private $regexCategory = array();
     private $version = '0.0 alpha';
+
+    public function __construct($registry, $data)
+    {
+        $this->config = $registry->get('config');
+        $this->db = $registry->get('db');
+    }
 
     public function load($url = false)
     {
