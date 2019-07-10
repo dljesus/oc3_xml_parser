@@ -5,6 +5,8 @@ class ControllerExtensionModuleAsperXmlSuppliersParser extends Controller
     private $error = array();
     private $feed = '';
     private $options = array();
+    private $catgorys = array();
+    private $products = array();
     private $id;
     private $fileName;
     private $name = '';

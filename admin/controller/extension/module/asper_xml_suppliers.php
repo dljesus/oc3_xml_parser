@@ -260,4 +260,29 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
     private function test3() {
         return 'test3';
     }
+
+    public function getCategory()
+    {
+        $categorys = array();
+        $feed = file_get_contents(DIR_CATALOG.'../yml3.xml');
+        $regex = '/<category\s+?(?:parentId\s?=\s?["|\'](\d*)["|\']\s*?|)id\s?=\s?["|\'](\d*)["|\']\s*?(?:parentId\s?=\s?["|\'](\d*)["|\']\s*?|)>(.*?)<\/category>/sui';
+        $matches = array();
+        preg_match_all($regex , $feed, $matches, PREG_SET_ORDER );
+        //var_dump($matches);die;
+        foreach ($matches as $match) {
+            $categorys[$match[2]]['name'] = $match[4];
+            $categorys[$match[2]]['id'] = $match[2];
+
+            $categorys[$match[2]]['id'] = $match[4];
+            if ($match[3]){
+                $categorys[$match[2]]['parent'] = $match[2];
+            } elseif ($match[1]){
+                $categorys[$match[2]]['parent'] = $match[1];
+            } else {
+                $categorys[$match[2]]['parent'] = 0;
+            }
+        }
+        var_dump($categorys);die;
+    }
+
 }

@@ -4,3 +4,5 @@
 2019-07-08 6:56:44 - PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: YES) in D:\server\OSPanel\domains\asper.xml\system\library\db\mysqli.php on line 7
 2019-07-08 6:56:44 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in D:\server\OSPanel\domains\asper.xml\system\library\db\mysqli.php on line 10
 2019-07-08 6:56:44 - PHP Warning:  DB\MySQLi::__construct(): Couldn't fetch mysqli in D:\server\OSPanel\domains\asper.xml\system\library\db\mysqli.php on line 10
+2019-07-10 15:36:41 - PHP Warning:  file_get_contents(D:/Server/www/asper.xml/catalog//../yml2.xml): failed to open stream: No such file or directory in D:\Server\www\asper.xml\admin\controller\extension\module\asper_xml_suppliers.php on line 266
+2019-07-10 15:37:12 - PHP Warning:  file_get_contents(D:/Server/www/asper.xml/catalog/../yml2.xml): failed to open stream: No such file or directory in D:\Server\www\asper.xml\admin\controller\extension\module\asper_xml_suppliers.php on line 266
