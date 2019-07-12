@@ -1,5 +1,5 @@
 <?php
-require_once ('AbstractSupplierParser.php');
+require_once ('AbstractParser.php');
 
 class YandexYmlParser extends AbstractParser
 {
@@ -12,10 +12,17 @@ class YandexYmlParser extends AbstractParser
     {
         $regex = '/<category\s+?(?:parentId\s?=\s?["|\'](\d*)["|\']\s*?|)id\s?=\s?["|\'](\d*)["|\']\s*?(?:parentId\s?=\s?["|\'](\d*)["|\']\s*?|)>(.*?)<\/category>/sui';
         $matches = array();
-        preg_match_all($regex , $this->feed, $matches);
-
+        preg_match_all($regex , $this->feed, $matches, PREG_SET_ORDER );
         foreach ($matches as $match) {
-
+            $this->categorys[$match[2]]['name'] = $match[4];
+            $this->categorys[$match[2]]['external_id'] = $match[2];
+            if ($match[3]){
+                $this->categorys[$match[2]]['parent_id'] = $match[3];
+            } elseif ($match[1]){
+                $this->categorys[$match[2]]['parent_id'] = $match[1];
+            } else {
+                $this->categorys[$match[2]]['parent_id'] = 0;
+            }
         }
     }
     public function getProduct()
@@ -30,21 +37,34 @@ class YandexYmlParser extends AbstractParser
             $description = $this->getDescription($match[0]);
             $category = $this->getProductCategory($match[0]);
             $images = $this->getImages($match[0], $name);
+            $this->products[$id] = array(
+                'id'            => $id,
+                'price'         => $price,
+                'name'          => $name,
+                'description'   => $description,
+                'image'         => array_shift($images),
+                'images'        => $images,
+                'category'      => $category,
+            );
         }
     }
 
     public function getImages($offer, $name){
         $images = array();
-        $file = $this->translit($name) . ;
+        $file = $this->translit($name);
         $path = DIR_IMAGE . 'catalog/' . $file{0} . '/' . $file{1};
         $regex = '/<picture>(.*?)<\/picture>/sui';
         $matches = array();
         preg_match_all ($regex, $offer, $matches, PREG_SET_ORDER);
         foreach ($matches as $key => $match) {
-            $image = $this->downloadImage($match[1], $fileName);
-
+            $ext = pathinfo($match[1] , PATHINFO_EXTENSION);
+            $filePath = $path . '/' . $name . '-' . $key . '.' . $ext ;
+            $image = $this->downloadImage($match[1], $filePath);
+            if ($image){
+                $images[] = $image;
+            }
         }
-
+        return $images;
     }
 
     protected function getName($offer){

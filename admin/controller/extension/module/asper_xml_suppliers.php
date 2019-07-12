@@ -273,16 +273,18 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
             $categorys[$match[2]]['name'] = $match[4];
             $categorys[$match[2]]['id'] = $match[2];
 
-            $categorys[$match[2]]['id'] = $match[4];
             if ($match[3]){
-                $categorys[$match[2]]['parent'] = $match[2];
+                $categorys[$match[2]]['parent'] = $match[3];
             } elseif ($match[1]){
                 $categorys[$match[2]]['parent'] = $match[1];
             } else {
                 $categorys[$match[2]]['parent'] = 0;
             }
         }
-        var_dump($categorys);die;
+        var_dump($categorys); die;
+       // $path = 'D:/Server/www/asper.xml/catalog/uploads/product/9d46fc51732545231ceb5d154e9e16c3-4.jpg';
+//        $a  = pathinfo($path , PATHINFO_DIRNAME );
+//        var_dump($a); die;
     }
 
 }

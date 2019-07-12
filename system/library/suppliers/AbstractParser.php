@@ -50,6 +50,42 @@ abstract class AbstractParser
         return $this->feed;
     }
 
+    public function downloadImage ($url , $file) {
+        $dirname  =  pathinfo($file , PATHINFO_DIRNAME );
+        if (!file_exists($dirname)){
+            if(!mkdir($dirname , 0777, true )){
+                return false;
+            }
+        }
+        set_time_limit(0);
+        $fp = fopen ($file, 'w');
+        $ch = curl_init(str_replace(" ","%20",$url));
+        curl_setopt($ch, CURLOPT_TIMEOUT, 180);
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+        if ($result){
+            return $file;
+        }
+        return false;
+    }
+
     abstract public function getProduct ();
     abstract public function getCategory ();
+
+    protected function translit($s) {
+        $s = (string) $s;
+        $s = strip_tags($s);
+        $s = str_replace(array("\n", "\r"), " ", $s);
+        $s = preg_replace("/\s+/", ' ', $s);
+        $s = trim($s);
+        $s = function_exists('mb_strtolower') ? mb_strtolower($s) : strtolower($s);
+        $s = strtr($s, array('а'=>'a','б'=>'b','в'=>'v','г'=>'g','д'=>'d','е'=>'e','ё'=>'e','ж'=>'j','з'=>'z','и'=>'i','й'=>'y','к'=>'k','л'=>'l','м'=>'m','н'=>'n','о'=>'o','п'=>'p','р'=>'r','с'=>'s','т'=>'t','у'=>'u','ф'=>'f','х'=>'h','ц'=>'c','ч'=>'ch','ш'=>'sh','щ'=>'shch','ы'=>'y','э'=>'e','ю'=>'yu','я'=>'ya','ъ'=>'','ь'=>'','ґ'=>'g','є'=>'ye','і'=>'i','ї'=>'yi'));
+        $s = preg_replace("/[^0-9a-z-_ ]/i", "", $s);
+        $s = str_replace(" ", "-", $s);
+        // print_r($s);
+        return $s;
+    }
 }
