@@ -33,9 +33,41 @@ class SupplierParser {
             }
         }
         $feed_products = $feed->getProduct();
+        $old_products = $this->getProduct($id);
+        $newProduct = array();
+        $updatePrice = array();
+        foreach ($feed_products as $key => $value){
+            if (isset($old_products[$key])) {
+                if($old_products[$key]['parsed'] && $old_products[$key]['product_id'] ){
+                   if ($old_products[$key]['price'] && $old_products[$key]['price']!= $value['price']){
+                       $updatePrice[$key]['price'] = $value['price'];
+                       $updatePrice[$key]['product_id'] = $value['product_id'];
+                   }
+                }
+            } else {
+                $newProduct[$key] = $value;
+                if (isset($category[$value['category']])){
+                    if ($category[$value['category']]['not_add']){
+                        unset($newProduct[$key]);
+                    } else {
+                        $newProduct[$key]['category_id'] = $category[$value['category']]['category_id'];
+                        if ($category[$value['category']]['add_to_parent']){
+                            $newProduct[$key]['path'] = $category[$value['category']]['path'];
+                        }
+                        $newProduct[$key]['add_to_parent'] = $category[$value['category']]['add_to_parent'];
+                    }
+                }
+            }
+        }
 
+        $this->updateProduct($updatePrice);
     }
     protected function getCategory ($id) {
+        $query_path = $this->db->query("SELECT * FROM " . DB_PREFIX . "category_path");
+        $paths = array();
+        foreach ($query_path->rows as $path){
+            $paths[$path['category_id']][] = $path['path_id'];
+        }
         $categorys = array();
         $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "asper_supplier_category WHERE supplier_id='" . $id . "'");
         foreach ($query->rows as $cat) {
@@ -48,6 +80,9 @@ class SupplierParser {
                 'add_to_parent' => $cat['add_to_parent'],
                 'category_id'   => $cat['category_id'],
             );
+            if(isset($paths[$cat['category_id']])){
+                $categorys[$cat['external_id']]['path'] = $paths[$cat['category_id']];
+            }
         }
         return $categorys;
     }
@@ -59,7 +94,7 @@ class SupplierParser {
 
     protected function getProduct($id) {
         $products = array();
-        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "asper_supplier_products WHERE supplier_id='" . $id . "'");
+        $query = $this->db->query("SELECT asp.*, p.price FROM " . DB_PREFIX . "asper_supplier_products asp LEFT JOIN " . DB_PREFIX . "product p ON p.product_id = asp.product_id  WHERE supplier_id='" . $id . "'");
         foreach ($query->rows as $cat) {
             $products[$cat['external_id']] = array(
                 'id'            => $cat['id'],
@@ -72,5 +107,32 @@ class SupplierParser {
             );
         }
         return $products;
+    }
+
+    protected function updateProduct($products){
+        $step = 1;
+        $steps = 50;
+        $count = count($products);
+        $sqls = array();
+        $ids = array();
+        foreach ($products as $key=>$value){
+            if ($step<$steps){
+                $sqls[]= "WHEN product_id = " . $value['product_id'] . " THEN " . $value['price'];
+                $ids[] = $value['product_id'];
+            }
+            if ($step == $steps || $step == $count){
+                $step = 1;
+                $sql = "UPDATE " . DB_PREFIX ."product SET price = CASE ";
+                $sql.= implode( ' ' , $sqls);
+                $sql.= "END WHERE product_id IN (";
+                $sql.= implode( ',' , $ids);
+                $sql.= ")";
+                $this->db->query($sql);
+                $sqls = array();
+                $ids = array();
+            } else {
+                $step++;
+            }
+        }
     }
 }
