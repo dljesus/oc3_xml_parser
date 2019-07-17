@@ -77,10 +77,9 @@
                                         <td class="text-center">{{ supplier.notification }}</td>
                                         <td class="text-center">{{ supplier.status ? text_status_actived : text_status_disable }}</td>
                                         <td class="text-center">{{ supplier.status ? text_update_on : text_update_off }}</td>
-                                        <td class="text-center">{{ supplier.date_create }}</td>
+                                        <td class="text-center">{{ supplier.date_add }}</td>
                                         <td class="text-center">{{ supplier.date_update }}</td>
-
-                                        <td class="text-right"><a href="{{ category.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>
+                                        <td class="text-right"><a href="{{ supplier.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>
                                     </tr>
                                 {% endfor %}
                             {% else %}

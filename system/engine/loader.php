@@ -143,10 +143,8 @@ final class Loader {
 	public function library($route) {
 		// Sanitize the call
 		$route = preg_replace('/[^a-zA-Z0-9_\/]/', '', (string)$route);
-			
 		$file = DIR_SYSTEM . 'library/' . $route . '.php';
 		$class = str_replace('/', '\\', $route);
-
 		if (is_file($file)) {
 			include_once($file);
 

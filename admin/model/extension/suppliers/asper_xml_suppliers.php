@@ -13,4 +13,8 @@ class ModelExtensionSuppliersAsperXmlSuppliers extends Model {
         $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "asper_supplier WHERE supplier_id='" . $id . "'");
         return $query->row;
     }
+    public function getCatgorys($id) {
+        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "asper_supplier_category WHERE supplier_id = '" . (int)$id . "'");
+        return $query->rows;
+    }
 }

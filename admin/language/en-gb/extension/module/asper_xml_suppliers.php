@@ -12,7 +12,12 @@ $_['text_status_actived'] = 'ON';
 $_['text_status_disable'] = 'OFF';
 $_['text_update_on'] = 'ON';
 $_['text_update_off'] = 'OFF';
+$_['text_general'] = 'General options';
+$_['text_category'] = 'Category relationship';
 
+//Tab
+$_['tab_category'] = 'Category';
+$_['tab_notification'] = 'Notification';
 
 
 //column
@@ -28,10 +33,17 @@ $_['column_update'] = 'CRON';
 
 // Entry
 $_['entry_status']     = 'Status';
+$_['entry_cron']     = 'CRON';
 $_['entry_url'] = 'Link feed';
+$_['entry_stock_status'] = 'Stock status';
+$_['entry_quantity'] = 'Quantity';
+$_['entry_name'] = 'Name';
+
 
 // Help
 $_['help_new'] = 'Enter the provider feed link (Google and Yandex .xml feeds are supported)';
+$_['help_stock_status'] = 'Stock status help';
+$_['help_quantity'] = 'Quantity help';
 
 //button
 $_['button_add'] = 'Add Supplier';

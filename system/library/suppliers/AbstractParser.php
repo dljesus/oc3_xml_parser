@@ -1,4 +1,5 @@
 <?php
+namespace suppliers;
 abstract class AbstractParser
 {
     protected $error = array();
@@ -16,7 +17,7 @@ abstract class AbstractParser
     public function __construct($registry, $supplier)
     {
         $this->id = $supplier['supplier_id'];
-        $this->options = $supplier['options'];
+        //$this->options = $supplier['options'];
         $this->name = $supplier['name'];
         $this->fileName = $supplier['supplier_id'] . $supplier['name'];
         $this->url = $supplier['url'];
@@ -25,16 +26,17 @@ abstract class AbstractParser
     }
 
 
-    public function download () {
+    public function download()
+    {
         set_time_limit(0);
-        $file_name = DIR_CACHE . 'suppliers/'  . $this->fileName . '.xml';
+        $file_name = DIR_CACHE . 'suppliers/' . $this->fileName . '.xml';
         if (!file_exists(DIR_CACHE . 'suppliers')) {
-            if(!mkdir(DIR_CACHE . 'suppliers' , 0777)){
+            if (!mkdir(DIR_CACHE . 'suppliers', 0777)) {
                 return array('error' => 'failed to create directory');
             }
         }
-        $fp = fopen ($file_name, 'w');
-        $ch = curl_init(str_replace(" ","%20",$this->url));
+        $fp = fopen($file_name, 'w');
+        $ch = curl_init(str_replace(" ", "%20", $this->url));
         curl_setopt($ch, CURLOPT_TIMEOUT, 180);
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
@@ -43,46 +45,55 @@ abstract class AbstractParser
         fclose($fp);
     }
 
-    protected function getFeed() {
+    protected function getFeed()
+    {
         if (!$this->feed) {
-            $this->feed = file_get_contents(DIR_CACHE . 'suppliers/'  . $this->fileName . '.xml');
+            $this->feed = file_get_contents(DIR_CACHE . 'suppliers/' . $this->fileName . '.xml');
         }
         return $this->feed;
     }
 
-    public function downloadImage ($url , $file) {
-        $dirname  =  pathinfo($file , PATHINFO_DIRNAME );
-        if (!file_exists($dirname)){
-            if(!mkdir($dirname , 0777, true )){
-                return false;
+    public function downloadImage($url, $file)
+    {
+        if (!is_file($file)) {
+            $dirname = pathinfo($file, PATHINFO_DIRNAME);
+            if (!file_exists($dirname)) {
+                if (!mkdir($dirname, 777, true)) {
+                    return false;
+                }
             }
+            set_time_limit(0);
+            $fp = fopen($file, 'w');
+            $ch = curl_init(str_replace(" ", "%20", $url));
+            curl_setopt($ch, CURLOPT_TIMEOUT, 180);
+            curl_setopt($ch, CURLOPT_FILE, $fp);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            fclose($fp);
+        } else {
+            $result = true;
         }
-        set_time_limit(0);
-        $fp = fopen ($file, 'w');
-        $ch = curl_init(str_replace(" ","%20",$url));
-        curl_setopt($ch, CURLOPT_TIMEOUT, 180);
-        curl_setopt($ch, CURLOPT_FILE, $fp);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        $result = curl_exec($ch);
-        curl_close($ch);
-        fclose($fp);
-        if ($result){
+        if ($result) {
+            $file = str_replace(DIR_IMAGE, '', $file);
             return $file;
         }
         return false;
     }
 
-    abstract public function getProduct ();
-    abstract public function getCategory ();
+    abstract public function getProduct();
 
-    protected function translit($s) {
-        $s = (string) $s;
+    abstract public function getCategory();
+
+    protected function translit($s)
+    {
+        $s = (string)$s;
         $s = strip_tags($s);
         $s = str_replace(array("\n", "\r"), " ", $s);
         $s = preg_replace("/\s+/", ' ', $s);
         $s = trim($s);
         $s = function_exists('mb_strtolower') ? mb_strtolower($s) : strtolower($s);
-        $s = strtr($s, array('а'=>'a','б'=>'b','в'=>'v','г'=>'g','д'=>'d','е'=>'e','ё'=>'e','ж'=>'j','з'=>'z','и'=>'i','й'=>'y','к'=>'k','л'=>'l','м'=>'m','н'=>'n','о'=>'o','п'=>'p','р'=>'r','с'=>'s','т'=>'t','у'=>'u','ф'=>'f','х'=>'h','ц'=>'c','ч'=>'ch','ш'=>'sh','щ'=>'shch','ы'=>'y','э'=>'e','ю'=>'yu','я'=>'ya','ъ'=>'','ь'=>'','ґ'=>'g','є'=>'ye','і'=>'i','ї'=>'yi'));
+        $s = strtr($s, array('а' => 'a', 'б' => 'b', 'в' => 'v', 'г' => 'g', 'д' => 'd', 'е' => 'e', 'ё' => 'e', 'ж' => 'j', 'з' => 'z', 'и' => 'i', 'й' => 'y', 'к' => 'k', 'л' => 'l', 'м' => 'm', 'н' => 'n', 'о' => 'o', 'п' => 'p', 'р' => 'r', 'с' => 's', 'т' => 't', 'у' => 'u', 'ф' => 'f', 'х' => 'h', 'ц' => 'c', 'ч' => 'ch', 'ш' => 'sh', 'щ' => 'shch', 'ы' => 'y', 'э' => 'e', 'ю' => 'yu', 'я' => 'ya', 'ъ' => '', 'ь' => '', 'ґ' => 'g', 'є' => 'ye', 'і' => 'i', 'ї' => 'yi'));
         $s = preg_replace("/[^0-9a-z-_ ]/i", "", $s);
         $s = str_replace(" ", "-", $s);
         // print_r($s);

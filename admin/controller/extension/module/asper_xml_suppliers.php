@@ -6,7 +6,8 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
 
     public function index() {
         $this->load->language('extension/module/asper_xml_suppliers');
-
+        //$this->load->library('suppliers/SupplierParser');
+        //$this->SupplierParser->startParse(1);
         $this->document->setTitle($this->language->get('heading_title') . $this->version);
 
         $this->getList();
@@ -64,8 +65,12 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
             'text' => $this->language->get('heading_title'),
             'href' => $this->url->link('extension/module/asper_xml_suppliers', 'user_token=' . $this->session->data['user_token'] . $url, true)
         );
-
-        $data['suppliers'] =  $this->model_extension_suppliers_asper_xml_suppliers->getSuppliers($sort);
+        $suppliers = $this->model_extension_suppliers_asper_xml_suppliers->getSuppliers($sort);
+        $data['suppliers'] = array();
+        foreach ($suppliers as $supplier){
+            $supplier['edit'] = $this->url->link('extension/module/asper_xml_suppliers/edit', 'user_token=' . $this->session->data['user_token'] . '&supplier_id=' . $supplier['supplier_id'] . $url);
+            $data['suppliers'][] = $supplier;
+        }
 
         //actions
         $data['add'] = $this->url->link('extension/module/asper_xml_suppliers/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
@@ -181,6 +186,93 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
         $this->response->setOutput(json_encode($json));
     }
 
+    public function edit(){
+        $this->load->language('extension/module/asper_xml_suppliers');
+
+        $this->document->setTitle($this->language->get('heading_title') . ' ' . $this->version);
+
+        $this->load->model('extension/suppliers/asper_xml_suppliers');
+
+        $data = array();
+
+        if (isset($this->request->get['sort'])) {
+            $sort = $this->request->get['sort'];
+        } else {
+            $sort = 'name';
+        }
+
+        if (isset($this->request->get['order'])) {
+            $order = $this->request->get['order'];
+        } else {
+            $order = 'ASC';
+        }
+
+        if (isset($this->request->get['page'])) {
+            $page = $this->request->get['page'];
+        } else {
+            $page = 1;
+        }
+
+        $url = '';
+
+        if (isset($this->request->get['sort'])) {
+            $url .= '&sort=' . $this->request->get['sort'];
+        }
+        if (isset($this->request->get['order'])) {
+            $url .= '&order=' . $this->request->get['order'];
+        }
+
+        if (isset($this->request->get['page'])) {
+            $url .= '&page=' . $this->request->get['page'];
+        }
+
+        $data['breadcrumbs'] = array();
+        $data['breadcrumbs'][] = array(
+            'text' => $this->language->get('text_home'),
+            'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+        );
+        $data['breadcrumbs'][] = array(
+            'text' => $this->language->get('text_extension'),
+            'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true)
+        );
+        $data['breadcrumbs'][] = array(
+            'text' => $this->language->get('heading_title'),
+            'href' => $this->url->link('extension/module/asper_xml_suppliers', 'user_token=' . $this->session->data['user_token'] . $url, true)
+        );
+        $supplier_id = 0;
+        if (isset($this->request->get['supplier_id'])){
+            $supplier_id = $this->request->get['supplier_id'];
+        }
+
+        if($supplier_id){
+            $supplier = $this->model_extension_suppliers_asper_xml_suppliers->getSupplier($supplier_id);
+
+            $data['status'] = $supplier['status'];
+            $data['cron'] = $supplier['cron'];
+            $data['name'] = $supplier['name'];
+            $data['url'] = $supplier['url'];
+            $data['quantity'] = $supplier['quantity'];
+            $data['stock_status_id'] = $supplier['stock_status_id'];
+            $this->load->model('localisation/stock_status');
+            $data['stock_statuses'] = $this->model_localisation_stock_status->getStockStatuses();
+            $data['categorys'] = $this->model_extension_suppliers_asper_xml_suppliers->getCatgorys($supplier_id);
+
+
+        }
+
+        //$supplier = $this->
+
+
+        $data['add'] = $this->url->link('extension/module/asper_xml_suppliers/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
+        $data['delete'] = $this->url->link('extension/module/asper_xml_suppliers/delete', 'user_token=' . $this->session->data['user_token'] . $url, true);
+        $data['user_token'] = $this->session->data['user_token'];
+        $data['header'] = $this->load->controller('common/header');
+        $data['column_left'] = $this->load->controller('common/column_left');
+        $data['footer'] = $this->load->controller('common/footer');
+
+        $this->response->setOutput($this->load->view('extension/module/asper_xml_suppliers_edit', $data));
+    }
+
     public function download() {
 
         $this->load->language('extension/module/asper_xml_suppliers');
@@ -245,22 +337,6 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
         $this->model_setting_event->deleteEventByCode('amazon_pay');
     }
 
-    public function test() {
-        $a = $this->request->get['method'];
-        var_dump($this->$a());die;
-        return $this->$a();
-    }
-
-    private function test1() {
-        return 'test1';
-    }
-    private function test2() {
-        return 'test2';
-    }
-    private function test3() {
-        return 'test3';
-    }
-
     public function getCategory()
     {
         $categorys = array();
@@ -282,9 +358,6 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
             }
         }
         var_dump($categorys); die;
-       // $path = 'D:/Server/www/asper.xml/catalog/uploads/product/9d46fc51732545231ceb5d154e9e16c3-4.jpg';
-//        $a  = pathinfo($path , PATHINFO_DIRNAME );
-//        var_dump($a); die;
     }
 
 }

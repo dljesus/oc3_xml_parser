@@ -1,5 +1,6 @@
 <?php
-
+namespace suppliers;
+use \suppliers\YandexYmlParser;
 /**
  * Created by PhpStorm.
  * User: asper.pro
@@ -9,6 +10,7 @@
 class ParserFactory
 {
     private $db;
+    private $registry;
     private $regexType = array(
         'Google'        => '/<\?xml [^>]*>[\s\n\r\n]*?<rss\sxmlns:g=\s?["|\']http[s]?:\/\/base.google.com/sui' ,
         'YandexYml'    => '/<\?xml[^>]*>[\s\n\r\n]*?(?:<!doctype\s[^>]*?yml_catalog[^>]*?>|)[\s\n\r\n]*?<yml_catalog\sdate\s?=\s?["|\']{1}[^"\']*["|\']{1}>/sui',
@@ -16,7 +18,8 @@ class ParserFactory
 
     public function __construct($registry)
     {
-        $this->db = $registry->db;
+        $this->registry = $registry;
+        $this->db = $registry->get('db');
     }
     public function getParser($supplier) {
         if (!$supplier['type']) {
@@ -26,10 +29,11 @@ class ParserFactory
             }
         }
         $class = $supplier['type'] . 'Parser';
+        $className = '\\suppliers\\' . $supplier['type'] . 'Parser';
+
         $file = DIR_SYSTEM . 'library/suppliers/' . $class . '.php';
         if (is_file($file)) {
-            include_once($file);
-            return new $class($supplier);
+            return new $className($this->registry, $supplier);
         } else {
             return false;
         }
@@ -65,6 +69,6 @@ class ParserFactory
         curl_exec($ch);
         curl_close($ch);
         fclose($fp);
-        return array('file_name' => $file_name);
+        return  $file_name;
     }
 }
