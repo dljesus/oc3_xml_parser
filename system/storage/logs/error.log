@@ -400,3 +400,21 @@
 2019-07-17 17:52:51 - PHP Notice:  Indirect modification of overloaded property ControllerExtensionModuleAsperXmlSuppliers::$Array has no effect in D:\Server\www\asper.xml\admin\controller\extension\module\asper_xml_suppliers.php on line 259
 2019-07-17 18:07:52 - PHP Notice:  Undefined index: quantity in D:\Server\www\asper.xml\admin\controller\extension\module\asper_xml_suppliers.php on line 254
 2019-07-17 18:07:52 - PHP Notice:  Undefined index: stock_status_id in D:\Server\www\asper.xml\admin\controller\extension\module\asper_xml_suppliers.php on line 255
+2019-07-18 15:45:46 - PHP Notice:  Undefined index: url in D:\Server\www\asper.xml\admin\model\extension\suppliers\asper_xml_suppliers.php on line 22
+2019-07-18 15:45:46 - PHP Notice:  Undefined index: stock_status_id in D:\Server\www\asper.xml\admin\model\extension\suppliers\asper_xml_suppliers.php on line 22
+2019-07-18 15:49:19 - PHP Notice:  Undefined index: parent_id in D:\Server\www\asper.xml\admin\model\extension\suppliers\asper_xml_suppliers.php on line 25
+2019-07-18 15:49:19 - PHP Notice:  Undefined index: add_to_parent in D:\Server\www\asper.xml\admin\model\extension\suppliers\asper_xml_suppliers.php on line 25
+2019-07-18 15:49:19 - PHP Notice:  Undefined index: not_add in D:\Server\www\asper.xml\admin\model\extension\suppliers\asper_xml_suppliers.php on line 25
+2019-07-18 15:49:19 - PHP Notice:  Undefined index: parent_id in D:\Server\www\asper.xml\admin\model\extension\suppliers\asper_xml_suppliers.php on line 25
+2019-07-18 15:49:19 - PHP Notice:  Undefined index: add_to_parent in D:\Server\www\asper.xml\admin\model\extension\suppliers\asper_xml_suppliers.php on line 25
+2019-07-18 15:49:19 - PHP Notice:  Undefined index: not_add in D:\Server\www\asper.xml\admin\model\extension\suppliers\asper_xml_suppliers.php on line 25
+2019-07-18 16:15:36 - PHP Notice:  Undefined index: add_to_parent in D:\Server\www\asper.xml\admin\model\extension\suppliers\asper_xml_suppliers.php on line 30
+2019-07-18 16:15:36 - PHP Notice:  Undefined index: not_add in D:\Server\www\asper.xml\admin\model\extension\suppliers\asper_xml_suppliers.php on line 30
+2019-07-18 16:15:36 - PHP Notice:  Undefined index: add_to_parent in D:\Server\www\asper.xml\admin\model\extension\suppliers\asper_xml_suppliers.php on line 30
+2019-07-18 16:15:36 - PHP Notice:  Undefined index: not_add in D:\Server\www\asper.xml\admin\model\extension\suppliers\asper_xml_suppliers.php on line 30
+2019-07-18 16:15:42 - PHP Notice:  Undefined index: add_to_parent in D:\Server\www\asper.xml\admin\model\extension\suppliers\asper_xml_suppliers.php on line 30
+2019-07-18 16:15:42 - PHP Notice:  Undefined index: not_add in D:\Server\www\asper.xml\admin\model\extension\suppliers\asper_xml_suppliers.php on line 30
+2019-07-18 16:15:42 - PHP Notice:  Undefined index: add_to_parent in D:\Server\www\asper.xml\admin\model\extension\suppliers\asper_xml_suppliers.php on line 30
+2019-07-18 16:15:42 - PHP Notice:  Undefined index: not_add in D:\Server\www\asper.xml\admin\model\extension\suppliers\asper_xml_suppliers.php on line 30
+2019-07-18 16:35:39 - PHP Notice:  Undefined index: options in D:\Server\www\asper.xml\admin\controller\extension\module\asper_xml_suppliers_parser.php on line 76
+2019-07-18 17:12:39 - PHP Notice:  Trying to get property of non-object in D:\Server\www\asper.xml\system\library\suppliers\SupplierParser.php on line 43

@@ -1,15 +1,16 @@
 <?php
 namespace suppliers;
+use suppliers\YandexYmlParser;
 abstract class AbstractParser
 {
     protected $error = array();
     protected $feed;
     protected $options = array();
-    protected $id = '';
+    public $id = '';
     protected $fileName = '';
-    protected $url = '';
+    public $url = '';
     protected $name = '';
-    protected $type = '';
+    public $type = '';
     protected $categorys;
     protected $products;
     protected $newCategory;
@@ -17,7 +18,6 @@ abstract class AbstractParser
     public function __construct($registry, $supplier)
     {
         $this->id = $supplier['supplier_id'];
-        //$this->options = $supplier['options'];
         $this->name = $supplier['name'];
         $this->fileName = $supplier['supplier_id'] . $supplier['name'];
         $this->url = $supplier['url'];

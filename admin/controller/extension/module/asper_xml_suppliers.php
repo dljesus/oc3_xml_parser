@@ -245,6 +245,23 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
         }
 
         if($supplier_id){
+
+            if (($this->request->server['REQUEST_METHOD'] == 'POST') ) {
+                $this->model_extension_suppliers_asper_xml_suppliers->editSupplier($supplier_id, $this->request->post);
+                $this->session->data['success'] = $this->language->get('text_success');
+            }
+
+            if (isset($this->session->data['success'])) {
+                $data['success'] = $this->session->data['success'];
+
+                unset($this->session->data['success']);
+            } else {
+                $data['success'] = '';
+            }
+
+            $data['action'] = $this->url->link('extension/module/asper_xml_suppliers/edit', 'user_token=' . $this->session->data['user_token'] . '&supplier_id=' . $supplier_id . $url, true);
+            $data['cancel'] = $this->url->link('extension/module/asper_xml_suppliers', 'user_token=' . $this->session->data['user_token'] . $url, true);
+
             $supplier = $this->model_extension_suppliers_asper_xml_suppliers->getSupplier($supplier_id);
 
             $data['status'] = $supplier['status'];
@@ -260,7 +277,6 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
 
         }
 
-        //$supplier = $this->
 
 
         $data['add'] = $this->url->link('extension/module/asper_xml_suppliers/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
@@ -272,6 +288,8 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
 
         $this->response->setOutput($this->load->view('extension/module/asper_xml_suppliers_edit', $data));
     }
+
+
 
     public function download() {
 
@@ -299,17 +317,13 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
         $this->load->language('extension/module/asper_xml_suppliers');
 
         if (isset($this->request->post['id']) && $this->request->post['id']) {
-            try {
-                $id = $this->load->controller('extension/module/asper_xml_suppliers_parser/analysis', $this->request->post['id']);
-                if (is_int($id)){
-                    $json['data'] = array();
-                    $json['data']['id'] = $id;
-                    $json['success'] = $this->language->get('success_download');
-                } else {
-                    $json['error'] = $id;
-                }
-            } catch (Exception $e) {
-                $json['error'] = $this->language->get('error_something') . $e->getMessage();
+            $this->load->library('suppliers/SupplierParser');
+            $id = $this->SupplierParser->startParse($this->request->post['id'], false ,true);
+            if ($id){
+                $json['redirect'] = $this->url->link('extension/module/asper_xml_suppliers/edit', 'user_token=' . $this->session->data['user_token'] . '&supplier_id=' . $id );
+                $json['redirect'] = str_replace('&amp;' , '&', $json['redirect']);
+            } else {
+                $json['error'] = $this->language->get('error_no_id');
             }
         } else {
             $json['error'] = $this->language->get('error_no_id');

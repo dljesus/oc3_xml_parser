@@ -24,8 +24,8 @@ class ParserFactory
     public function getParser($supplier) {
         if (!$supplier['type']) {
             $type = $this->parseType($supplier['supplier_id'], $supplier['url'], $supplier['name']);
-            if (isset($type['type'])) {
-                $supplier['type']=$type['type'];
+            if (isset($type)) {
+                $supplier['type']=$type;
             }
         }
         $class = $supplier['type'] . 'Parser';
@@ -51,6 +51,7 @@ class ParserFactory
             }
         }
         unset($feed);
+        return false;
     }
 
     public function download ($id, $url, $name) {

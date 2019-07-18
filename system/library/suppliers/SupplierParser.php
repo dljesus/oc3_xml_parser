@@ -24,7 +24,7 @@ class SupplierParser
         $this->db = $registry->get('db');
     }
 
-    public function startParse($id, $supplier = false)
+    public function startParse($id, $supplier = false , $init = false)
     {
         $this->feed_id = $id;
         $this->urls = $this->getUrls();
@@ -33,7 +33,11 @@ class SupplierParser
         }
         $this->languages = $this->getLanguageId();
         $category = $this->getCategory($id);
-
+        $this->quantity = $supplier['quantity'];
+        if ($supplier['stock_status_id'] && !$init){
+            return false;
+        }
+        $this->stock_status_id = $supplier['stock_status_id'];
         $parser = new ParserFactory($this->registry);
         $feed = $parser->getParser($supplier);
         $this->type = $feed->type;
@@ -53,6 +57,10 @@ class SupplierParser
         }
         //$this->updateCategory($category);
         $this->newCategory($newCategory);
+        $this->updateSupplier();
+        if ( $init){
+            return $id;
+        }
         $feed_products = $feed->getProduct();
         $old_products = $this->getProduct($id);
         $newProduct = array();
@@ -90,7 +98,11 @@ class SupplierParser
         }
         $this->updateProduct($updatePrice);
         $this->addProduct($newProduct);
-        $this->updateSupplier();
+        return true;
+    }
+
+    public function initParser($id){
+
     }
 
     protected function getCategory($id)

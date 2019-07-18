@@ -14,6 +14,8 @@ $_['text_update_on'] = 'ON';
 $_['text_update_off'] = 'OFF';
 $_['text_general'] = 'General options';
 $_['text_category'] = 'Category relationship';
+$_['text_relate'] = 'Relate';
+$_['text_success'] = 'Suppliers saved!';
 
 //Tab
 $_['tab_category'] = 'Category';
@@ -30,6 +32,9 @@ $_['column_date_add'] = 'Date add';
 $_['column_date_parse'] = 'Date parse';
 $_['column_status'] = 'Status';
 $_['column_update'] = 'CRON';
+$_['column_parent'] = 'Category relationship';
+$_['column_add_to_parent'] = 'Add to parent';
+$_['column_not_add'] = 'Dont add';
 
 // Entry
 $_['entry_status']     = 'Status';
@@ -38,12 +43,16 @@ $_['entry_url'] = 'Link feed';
 $_['entry_stock_status'] = 'Stock status';
 $_['entry_quantity'] = 'Quantity';
 $_['entry_name'] = 'Name';
+$_['entry_parent'] = 'Relation category';
 
 
 // Help
 $_['help_new'] = 'Enter the provider feed link (Google and Yandex .xml feeds are supported)';
 $_['help_stock_status'] = 'Stock status help';
 $_['help_quantity'] = 'Quantity help';
+$_['help_add_to_parent'] = 'add to parent categories';
+$_['help_parent'] = 'The category to which the category from the feed will belong';
+$_['help_dont_add'] = 'Products from this category will not be added.';
 
 //button
 $_['button_add'] = 'Add Supplier';

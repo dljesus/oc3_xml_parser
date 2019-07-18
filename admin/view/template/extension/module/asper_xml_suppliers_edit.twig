@@ -3,8 +3,11 @@
     <div class="page-header">
         <div class="container-fluid">
             <div class="pull-right">
-                <button type="submit" id="button-save" form="form-setting" data-toggle="tooltip" title="{{ button_save }}" disabled="disabled" class="btn btn-primary"><i class="fa fa-save"></i></button>
-                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+                <button type="submit" id="button-save" form="form-setting" data-toggle="tooltip"
+                        title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i>
+                </button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i
+                            class="fa fa-reply"></i></a></div>
             <h1>{{ heading_title }}</h1>
             <ul class="breadcrumb">
                 {% for breadcrumb in breadcrumbs %}
@@ -14,7 +17,8 @@
         </div>
     </div>
     <div class="container-fluid"> {% if error_warning %}
-            <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+            <div class="alert alert-danger alert-dismissible"><i
+                        class="fa fa-exclamation-circle"></i> {{ error_warning }}
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
             </div>
         {% endif %}
@@ -28,7 +32,8 @@
                 <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
             </div>
             <div class="panel-body">
-                <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-setting" class="form-horizontal">
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-setting"
+                      class="form-horizontal">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
                         <li><a href="#tab-category" data-toggle="tab">{{ tab_category }}</a></li>
@@ -39,20 +44,25 @@
                             <fieldset>
                                 <legend>{{ text_general }}</legend>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label" for="input-tax-customer">{{ entry_name }}</label>
+                                    <label class="col-sm-2 control-label"
+                                           for="input-tax-customer">{{ entry_name }}</label>
                                     <div class="col-sm-10">
-                                        <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="name" class="form-control"/>
+                                        <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}"
+                                               id="name" class="form-control"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label" for="input-tax-customer">{{ entry_url }}</label>
+                                    <label class="col-sm-2 control-label"
+                                           for="input-tax-customer">{{ entry_url }}</label>
                                     <div class="col-sm-10">
-                                        <input type="text" name="quantity" value="{{ url }}" placeholder="{{ entry_url }}" id="name" class="form-control"/>
+                                        <input type="text" name="url" value="{{ url }}"
+                                               placeholder="{{ entry_url }}" id="name" class="form-control"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-6">
-                                        <label class="col-sm-4 control-label" for="input-status">{{ entry_status }}</label>
+                                        <label class="col-sm-4 control-label"
+                                               for="input-status">{{ entry_status }}</label>
                                         <div class="col-sm-8">
                                             <select name="status" id="input-status" class="form-control">
                                                 {% if status %}
@@ -66,7 +76,8 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label class="col-sm-4 control-label" for="input-status">{{ entry_cron }}</label>
+                                        <label class="col-sm-4 control-label"
+                                               for="input-status">{{ entry_cron }}</label>
                                         <div class="col-sm-8">
                                             <select name="cron" id="input-status" class="form-control">
                                                 {% if status %}
@@ -81,12 +92,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label" for="input-tax-default"><span data-toggle="tooltip" title="{{ help_stock_status  }}">{{ entry_stock_status }}</span></label>
+                                    <label class="col-sm-2 control-label" for="input-tax-default"><span
+                                                data-toggle="tooltip"
+                                                title="{{ help_stock_status }}">{{ entry_stock_status }}</span></label>
                                     <div class="col-sm-10">
-                                        <select name="config_tax_default" id="input-tax-default" class="form-control">
+                                        <select name="stock_status_id" id="input-tax-default" class="form-control">
                                             {% for stock_status in stock_statuses %}
                                                 {% if stock_status.stock_status_id == stock_status_id %}
-                                                    <option value="{{ stock_status.stock_status_id }}" selected="selected">{{ stock_status.name }}</option>
+                                                    <option value="{{ stock_status.stock_status_id }}"
+                                                            selected="selected">{{ stock_status.name }}</option>
                                                 {% else %}
                                                     <option value="{{ stock_status.stock_status_id }}">{{ stock_status.name }}</option>
                                                 {% endif %}
@@ -95,9 +109,13 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label" for="input-tax-customer"><span data-toggle="tooltip" title="{{ help_quantity }}">{{ entry_quantity }}</span></label>
+                                    <label class="col-sm-2 control-label" for="input-tax-customer"><span
+                                                data-toggle="tooltip"
+                                                title="{{ help_quantity }}">{{ entry_quantity }}</span></label>
                                     <div class="col-sm-10">
-                                        <input type="text" name="quantity" value="{{ quantity }}" placeholder="{{ entry_quantity }}" id="input-quantity" class="form-control"/>
+                                        <input type="text" name="quantity" value="{{ quantity }}"
+                                               placeholder="{{ entry_quantity }}" id="input-quantity"
+                                               class="form-control"/>
                                     </div>
                                 </div>
                             </fieldset>
@@ -105,89 +123,91 @@
                         <div class="tab-pane" id="tab-category">
                             <fieldset>
                                 <legend>{{ text_category }}</legend>
-                                {% for category in categorys %}
-                                    {{ category.name }}
-                                {% endfor %}
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <td class="text-center" width="1"></td>
+                                            <td class="text-center">{{ column_name }}</td>
+                                            <td class="text-center" data-toggle="tooltip" title="{{ help_parent }}">{{ column_parent }}</td>
+                                            <td class="text-center" data-toggle="tooltip" title="{{ help_add_to_parent }}" width="5">{{ column_add_to_parent }}</td>
+                                            <td class="text-center" data-toggle="tooltip" title="{{ help_dont_add }}" width="5">{{ column_not_add }}</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for category in categorys %}
+                                            <tr>
+                                                <td class="text-center" width="1">{{ loop.index }}</td>
+                                                <td>{{ category.name }}</td>
+                                                <td>
+                                                    <input id="{{ category.id }}_path" type="text" name="categorys[{{ category.id }}][path]" data-parent="{{ category.id }}"
+                                                           value="{{ category.path }}" placeholder="{{ entry_parent }}"
+                                                           class="authocomplite form-control"/>
+                                                    <input id="parent_id_{{ category.id }}" type="hidden" name="categorys[{{ category.id }}][parent_id]"
+                                                           value="{{ category.category_id }}"/>
+                                                    {% if error_parent %}
+                                                        <div class="text-danger">{{ error_parent }}</div>
+                                                    {% endif %}
+                                                </td>
+                                                <td  style="min-width: 100px" class="text-center" width="5">
+                                                    <select style="padding: unset" name="categorys[{{ category.id }}][add_to_parent]" class="form-control">
+                                                        {% if category.add_to_parent %}
+                                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+                                                            <option value="0">{{ text_disabled }}</option>
+                                                        {% else %}
+                                                            <option value="1">{{ text_enabled }}</option>
+                                                            <option value="0" selected="selected">{{ text_disabled }}</option>
+                                                        {% endif %}
+                                                    </select>
+                                                </td>
+                                                <td  style="min-width: 100px" class="text-center" width="5">
+                                                    <select style="padding: unset" name="categorys[{{ category.id }}][not_add]"  class="form-control">
+                                                        {% if category.not_add %}
+                                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+                                                            <option value="0">{{ text_disabled }}</option>
+                                                        {% else %}
+                                                            <option value="1">{{ text_enabled }}</option>
+                                                            <option value="0" selected="selected">{{ text_disabled }}</option>
+                                                        {% endif %}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <script type="text/javascript"><!--
+                                                $('input#{{ category.id }}_path').autocomplete({
+                                                    'source': function (request, response) {
+                                                        $.ajax({
+                                                            url: 'index.php?route=catalog/category/autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+                                                            dataType: 'json',
+                                                            success: function (json) {
+                                                                json.unshift({
+                                                                    category_id: 0,
+                                                                    name: '{{ text_none }}'
+                                                                });
+
+                                                                response($.map(json, function (item) {
+                                                                    return {
+                                                                        label: item['name'],
+                                                                        value: item['category_id']
+                                                                    }
+                                                                }));
+                                                            }
+                                                        });
+                                                    },
+                                                    'select': function (item) {
+                                                        $(this).val(item['label']);
+                                                        $('#parent_id_'+$(this).data('parent')).val(item['value']);
+                                                    }
+                                                });
+                                                //--></script>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </fieldset>
                         </div>
                         <div class="tab-pane" id="tab-notification">
                             <fieldset>
                                 <legend>{{ text_notification }}</legend>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">{{ entry_tax }}</label>
-                                    <div class="col-sm-10">
-                                        <label class="radio-inline"> {% if config_tax %}
-                                                <input type="radio" name="config_tax" value="1" checked="checked" />
-                                                {{ text_yes }}
-                                            {% else %}
-                                                <input type="radio" name="config_tax" value="1" />
-                                                {{ text_yes }}
-                                            {% endif %} </label>
-                                        <label class="radio-inline"> {% if not config_tax %}
-                                                <input type="radio" name="config_tax" value="0" checked="checked" />
-                                                {{ text_no }}
-                                            {% else %}
-                                                <input type="radio" name="config_tax" value="0" />
-                                                {{ text_no }}
-                                            {% endif %} </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label" for="input-tax-default"><span data-toggle="tooltip" title="{{ help_tax_default }}">{{ entry_tax_default }}</span></label>
-                                    <div class="col-sm-10">
-                                        <select name="config_tax_default" id="input-tax-default" class="form-control">
-                                            <option value="">{{ text_none }}</option>
-
-                                            {% if config_tax_default == 'shipping' %}
-
-                                                <option value="shipping" selected="selected">{{ text_shipping }}</option>
-
-                                            {% else %}
-
-                                                <option value="shipping">{{ text_shipping }}</option>
-
-                                            {% endif %}
-                                            {% if config_tax_default == 'payment' %}
-
-                                                <option value="payment" selected="selected">{{ text_payment }}</option>
-
-                                            {% else %}
-
-                                                <option value="payment">{{ text_payment }}</option>
-
-                                            {% endif %}
-
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label" for="input-tax-customer"><span data-toggle="tooltip" title="{{ help_tax_customer }}">{{ entry_tax_customer }}</span></label>
-                                    <div class="col-sm-10">
-                                        <select name="config_tax_customer" id="input-tax-customer" class="form-control">
-                                            <option value="">{{ text_none }}</option>
-
-                                            {% if config_tax_customer == 'shipping' %}
-
-                                                <option value="shipping" selected="selected">{{ text_shipping }}</option>
-
-                                            {% else %}
-
-                                                <option value="shipping">{{ text_shipping }}</option>
-
-                                            {% endif %}
-                                            {% if config_tax_customer == 'payment' %}
-
-                                                <option value="payment" selected="selected">{{ text_payment }}</option>
-
-                                            {% else %}
-
-                                                <option value="payment">{{ text_payment }}</option>
-
-                                            {% endif %}
-
-                                        </select>
-                                    </div>
-                                </div>
                             </fieldset>
                         </div>
                     </div>
@@ -195,31 +215,5 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript"><!--
-        $('input[name=\'path\']').autocomplete({
-            'source': function(request, response) {
-                $.ajax({
-                    url: 'index.php?route=catalog/category/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
-                    dataType: 'json',
-                    success: function(json) {
-                        json.unshift({
-                            category_id: 0,
-                            name: '{{ text_none }}'
-                        });
-
-                        response($.map(json, function(item) {
-                            return {
-                                label: item['name'],
-                                value: item['category_id']
-                            }
-                        }));
-                    }
-                });
-            },
-            'select': function(item) {
-                $('input[name=\'path\']').val(item['label']);
-                $('input[name=\'parent_id\']').val(item['value']);
-            }
-        });
-        //--></script></div>
+</div>
 {{ footer }}
