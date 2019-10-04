@@ -17,7 +17,6 @@ class SupplierParser
     protected $stock_status_id = 1;
     protected $quantity = 1;
     protected $type;
-
     public function __construct($registry)
     {
         $this->registry = $registry;
@@ -26,6 +25,7 @@ class SupplierParser
 
     public function startParse($id, $supplier = false , $init = false)
     {
+       //die('im_die');
         $this->feed_id = $id;
         $this->urls = $this->getUrls();
         if (!$supplier) {
@@ -34,7 +34,7 @@ class SupplierParser
         $this->languages = $this->getLanguageId();
         $category = $this->getCategory($id);
         $this->quantity = $supplier['quantity'];
-        if ($supplier['stock_status_id'] && !$init){
+        if (!$supplier['stock_status_id'] && !$init){
             return false;
         }
         $this->stock_status_id = $supplier['stock_status_id'];
@@ -63,16 +63,32 @@ class SupplierParser
         }
         $feed_products = $feed->getProduct();
         $old_products = $this->getProduct($id);
+		$producImages = $this->getProductImages($id);
         $newProduct = array();
         $updatePrice = array();
+        $updateImage = array();
         foreach ($feed_products as $key => $value) {
             if (isset($old_products[$key])) {
                 if ($old_products[$key]['parsed']) {
                     if ($old_products[$key]['product_id']) {
-                        if ($old_products[$key]['price'] && $old_products[$key]['price'] != $value['price']) {
-                            $updatePrice[$key]['price'] = $value['price'];
-                            $updatePrice[$key]['product_id'] = $value['product_id'];
-                        }
+						$value['product_id'] = $old_products[$key]['product_id'];
+						$product_id=$old_products[$key]['product_id'];
+						if (isset($value['product_id']) && $value['product_id']){
+							if ($old_products[$key]['price'] && $old_products[$key]['price'] != $value['price']) {
+								$updatePrice[$key]['price'] = $value['price'];
+								$updatePrice[$key]['product_id'] = $value['product_id'];
+							}
+							if(!$old_products[$key]['image'] && $value['image']){
+								$updateImage[$value['product_id']]['image'] = $value['image'];
+							} 
+							foreach($value['images'] as $i){
+								if (!isset($producImages[$value['product_id']][$i])){
+									$updateImage[$product_id]['images'][]=$i;
+								}
+							}
+						} else {
+						//	var_dump($value);
+						}
                     } else {
                         GOTO else_case;
                     }
@@ -93,14 +109,26 @@ class SupplierParser
                         }
                         $newProduct[$key]['add_to_parent'] = $category[$value['category']]['add_to_parent'];
                     }
+                } else {
+                    unset($newProduct[$key]);
                 }
             }
         }
         $this->updateProduct($updatePrice);
+		$this->updateImage($updateImage);
         $this->addProduct($newProduct);
         return true;
     }
-
+	
+	protected function getProductImages($id){
+		$images=array();
+		$query = $this->db->query("SELECT asp.product_id , p.image FROM " . DB_PREFIX . "product_image p LEFT JOIN " . DB_PREFIX . "asper_supplier_products asp ON asp.product_id = p.product_id WHERE asp.product_id IS NOT NULL AND supplier_id='" . $id . "'");
+        foreach ($query->rows as $cat) {
+			$images[$cat['product_id']][$cat['image']] = true;
+		}
+		return $images;
+	}
+	
     public function initParser($id){
 
     }
@@ -140,7 +168,7 @@ class SupplierParser
     protected function getProduct($id)
     {
         $products = array();
-        $query = $this->db->query("SELECT asp.*, p.price FROM " . DB_PREFIX . "asper_supplier_products asp LEFT JOIN " . DB_PREFIX . "product p ON p.product_id = asp.product_id  WHERE supplier_id='" . $id . "'");
+        $query = $this->db->query("SELECT asp.*, p.price, p.image FROM " . DB_PREFIX . "asper_supplier_products asp LEFT JOIN " . DB_PREFIX . "product p ON p.product_id = asp.product_id  WHERE supplier_id='" . $id . "'");
         foreach ($query->rows as $cat) {
             $products[$cat['external_id']] = array(
                 'id' => $cat['external_id'],
@@ -150,19 +178,25 @@ class SupplierParser
                 'product_id' => $cat['product_id'],
                 'parsed' => $cat['parsed'],
                 'external_category_id' => $cat['external_category_id'],
+                'price' => $cat['price'],
+				'image' => $cat['image'],
             );
         }
         return $products;
     }
 
     protected function updateProduct($products)
-    {
+    {	
+		//$t = microtime (true); тест производительности
         $step = 1;
         $steps = 50;
         $count = count($products);
         $sqls = array();
         $ids = array();
         foreach ($products as $key => $value) {
+            //для теста производительности
+			//$sql = "UPDATE " . DB_PREFIX . "product SET price = '" . $value['price'] . "' WHERE product_id = " . $value['product_id'] ;
+			//$this->db->query($sql);
             if ($step < $steps) {
                 $sqls[] = "WHEN product_id = " . $value['product_id'] . " THEN " . $value['price'];
                 $ids[] = $value['product_id'];
@@ -171,7 +205,7 @@ class SupplierParser
                 $step = 1;
                 $sql = "UPDATE " . DB_PREFIX . "product SET price = CASE ";
                 $sql .= implode(' ', $sqls);
-                $sql .= "END WHERE product_id IN (";
+                $sql .= " END WHERE product_id IN (";
                 $sql .= implode(',', $ids);
                 $sql .= ")";
                 $this->db->query($sql);
@@ -181,6 +215,10 @@ class SupplierParser
                 $step++;
             }
         }
+        /*
+		print_r($steps . ' --- ');
+		print_r($count . ' --- ');
+		print_r (microtime(true)-$t); die; */
     }
 
     protected function getLanguageId()

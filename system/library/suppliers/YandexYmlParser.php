@@ -41,7 +41,7 @@ class YandexYmlParser extends AbstractParser
             $description = $this->getDescription($match[0]);
             $category = $this->getProductCategory($match[0]);
             $images = $this->getImages($match[0], $name);
-            $this->products[$id] = array(
+            $this->products[$id .'_' .$this->id] = array(
                 'id' => $id,
                 'price' => $price,
                 'name' => $name,
@@ -104,6 +104,9 @@ class YandexYmlParser extends AbstractParser
         $regex = '/<description>(?:<!\[CDATA\[|)(.*?)(?:\]\]>|)<\/description>/sui';
         $match = array();
         preg_match($regex, $offer, $match);
-        return trim($match['1']);
+		if(isset($match['1'])){
+				return trim($match['1']);
+		}
+        return '';
     }
 }

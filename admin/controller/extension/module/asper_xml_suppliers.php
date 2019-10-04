@@ -342,13 +342,22 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
     }
 
     public function install() {
-        $this->load->model('setting/event');
-        $this->model_setting_event->deleteEventByCode('amazon_pay');
+        $supplier = $this->db->query("SHOW TABLES LIKE '" . DB_PREFIX . "asper_supplier'");
+        if(!$supplier->rows){
+            $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "asper_supplier` (`supplier_id` int(11) NOT NULL AUTO_INCREMENT,`name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,`url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,`type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,`date_add` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,`date_parse` timestamp NULL DEFAULT NULL,`status` tinyint(1) NOT NULL DEFAULT '1',`cron` tinyint(1) NOT NULL DEFAULT '1',`stock_status_id` int(5) DEFAULT NULL,`quantity` int(5) DEFAULT '1',PRIMARY KEY (`supplier_id`)) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
+        }
+        $category = $this->db->query("SHOW TABLES LIKE '" . DB_PREFIX . "asper_supplier_category'");
+        if(!$category->rows){
+            $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "asper_supplier_category` (  `id` int(11) NOT NULL AUTO_INCREMENT,  `supplier_id` int(11) NOT NULL,  `external_id` int(11) NOT NULL,  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,  `category_id` int(11) DEFAULT NULL COMMENT 'inner id',`parent_id` int(11) DEFAULT '0',  `not_add` tinyint(4) NOT NULL DEFAULT '0',  `add_to_parent` tinyint(4) NOT NULL DEFAULT '1',PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
+        }
+        $product = $this->db->query("SHOW TABLES LIKE '" . DB_PREFIX . "asper_supplier_products'");
+        if(!$product->rows){
+            $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "asper_supplier_products` (  `external_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,  `product_id` int(11) DEFAULT NULL,  `data` text COLLATE utf8_unicode_ci NOT NULL,  `external_category_id` int(11) NOT NULL,  `parsed` tinyint(4) NOT NULL DEFAULT '1',  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,  `supplier_id` int(11) NOT NULL,  PRIMARY KEY (`external_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
+        }
     }
 
     public function uninstall() {
-        $this->load->model('setting/event');
-        $this->model_setting_event->deleteEventByCode('amazon_pay');
+
     }
 
     public function getCategory()
@@ -371,7 +380,6 @@ class ControllerExtensionModuleAsperXmlSuppliers extends Controller {
                 $categorys[$match[2]]['parent'] = 0;
             }
         }
-        var_dump($categorys); die;
     }
 
 }
